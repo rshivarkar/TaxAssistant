@@ -14,7 +14,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AuthProvider>
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-        <BrowserRouter>
+        <BrowserRouter basename="/TaxAssistant">
           <App />
         </BrowserRouter>
       </GoogleOAuthProvider>
