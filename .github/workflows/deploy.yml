@@ -33,12 +33,28 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            api/package-lock.json
       - name: Install dependencies
         run: npm ci
+      - name: Test
+        run: npm test
+      - name: Test Azure upload function
+        run: npm ci && npm test && npm run build
+        working-directory: api
       - name: Build
         run: npm run build
+        # Set these under Settings → Secrets and variables → Actions → Variables.
+        env:
+          VITE_GOOGLE_CLIENT_ID: ${{ vars.VITE_GOOGLE_CLIENT_ID }}
+          VITE_STORAGE: ${{ vars.VITE_STORAGE }}
+          VITE_AWS_REGION: ${{ vars.VITE_AWS_REGION }}
+          VITE_S3_BUCKET: ${{ vars.VITE_S3_BUCKET }}
+          VITE_COGNITO_IDENTITY_POOL_ID: ${{ vars.VITE_COGNITO_IDENTITY_POOL_ID }}
+          VITE_AZURE_UPLOAD_URL_ENDPOINT: ${{ vars.VITE_AZURE_UPLOAD_URL_ENDPOINT }}
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
