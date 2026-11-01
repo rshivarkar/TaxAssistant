@@ -4,16 +4,21 @@ import { Cloud, FolderTree, Lock } from 'lucide-react';
 import { useAuth } from '../auth';
 import { config } from '../config';
 
-const destination =
-    config.storage === 's3'
-        ? {
-              title: 'Private S3 storage',
-              text: 'Files go to a private Amazon S3 folder that only your account can write to.',
-          }
-        : {
-              title: 'Your own Google Drive',
-              text: 'Files go straight to a TaxAssistant folder in your Google Drive. We never keep a copy.',
-          };
+const destinations = {
+    drive: {
+        title: 'Your own Google Drive',
+        text: 'Files go straight to a TaxAssistant folder in your Google Drive. We never keep a copy.',
+    },
+    s3: {
+        title: 'Private S3 storage',
+        text: 'Files go to a private Amazon S3 folder that only your account can write to.',
+    },
+    azure: {
+        title: 'Private Azure storage',
+        text: 'Files go to a private Azure Blob Storage folder that only your account can write to.',
+    },
+};
+const destination = destinations[config.storage];
 
 export default function Home() {
     const { signIn } = useAuth();
@@ -53,8 +58,8 @@ export default function Home() {
                 </div>
                 <div className="card feature">
                     <Lock size={40} color="#f59e0b" />
-                    <h3>No backend</h3>
-                    <p>A static site. Your browser talks directly to Google or AWS with short-lived credentials.</p>
+                    <h3>Direct uploads</h3>
+                    <p>Your browser uploads straight to storage with short-lived, single-purpose credentials.</p>
                 </div>
             </section>
         </div>
