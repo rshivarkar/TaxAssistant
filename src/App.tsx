@@ -1,20 +1,17 @@
-import { Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Dashboard from './pages/Dashboard';
+import { useAuth } from './auth';
+import Header from './components/Header';
+import Home from './components/Home';
+import Uploader from './components/Uploader';
 
-function App() {
-  return (
-    <div className="app-container">
-      <Navbar />
-      <main className="main-content">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </main>
-    </div>
-  );
+// Two screens, no router: signed out shows Home, signed in shows the uploader.
+// That also avoids GitHub Pages 404s on deep links.
+export default function App() {
+    const { user } = useAuth();
+
+    return (
+        <div className="app-container">
+            <Header />
+            <main className="main-content">{user ? <Uploader key={user.idToken} user={user} /> : <Home />}</main>
+        </div>
+    );
 }
-
-export default App;
